@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DulyNoted</string>
+    <string name="title_activity_edit_card">EditCardActivity</string>
+</resources>

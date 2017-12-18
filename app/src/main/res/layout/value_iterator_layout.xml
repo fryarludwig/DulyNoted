@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/com.fryarludwig.dulynoted"
+    xmlns:app2="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@android:color/transparent">
+
+    <!--<com.fryarludwig.dulynoted.ValueIterator-->
+        <!--android:id="@+id/valueIterator"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:backgroundTint="@android:color/transparent">-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/decrement_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingEnd="12dp"
+                android:paddingRight="12dp"
+                app2:srcCompat="@drawable/ic_action_name" />
+
+            <TextView
+                android:id="@+id/number_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingEnd="12dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingStart="12dp"
+                android:text="1"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <ImageButton
+                android:id="@+id/increment_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:paddingLeft="12dp"
+                android:paddingStart="12dp"
+                app2:srcCompat="@drawable/ic_action_plus_name" />
+        </LinearLayout>
+
+
+    <!--</com.fryarludwig.dulynoted.ValueIterator>-->
+
+</android.support.constraint.ConstraintLayout>
