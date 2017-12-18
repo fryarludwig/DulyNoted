@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onEvent(View view, int cardPosition, int buttonPosition) {
                 NoteCard noteCard = mNoteCards.get(cardPosition);
-                String message = String.format("Event saved: %s; %s", noteCard.mTitle, noteCard.getRecordName(buttonPosition));
+                Record record = noteCard.mRecordsList.get(buttonPosition);
+                record.logEvent();
+                String message = String.format("Event saved: %s; %s; %d", noteCard.mTitle, noteCard.getRecordName(buttonPosition), record.mTimestampsList.size());
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.main_activity_layout), message, Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
@@ -68,9 +70,6 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, EditCardActivity.class);
         startActivityForResult(intent, CREATE_CARD_REQUEST);
-
-//        RecyclerView rv = this.findViewById(R.id.card_recycle_view);
-//        rv.scrollToPosition(mNoteCards.size() - 1);
     }
 
     public void onEditCardClicked(View view)
@@ -123,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             NoteCard noteCard = (NoteCard)resultData.getParcelableExtra(EditCardActivity.EXTRA_NOTECARD);
-            mNoteCards.set(position, noteCard);
+            mNoteCards.get(position).updateNoteCardValues(noteCard);
+//            mNoteCards.set(position, noteCard);
             mRvAdapter.notifyItemChanged(position);
         }
     }

@@ -59,7 +59,6 @@ public class EditCardActivity extends AppCompatActivity {
             public void onEvent(View view) {
                 EditCardActivity activity = (EditCardActivity)view.getContext();
                 activity.updateVisibleFields();
-//                Snackbar.make(view, "Clicked!", Snackbar.LENGTH_LONG).show(); // Show the Snackbar
             }
         });
 

@@ -72,6 +72,24 @@ public class NoteCard implements Parcelable {
         }
     }
 
+    public void updateNoteCardValues(NoteCard noteCard){
+        mTitle = noteCard.mTitle;
+        for (int i = 0; i < noteCard.mRecordsList.size(); i++)
+        {
+            if (this.mRecordsList.size() > i)
+            {
+                this.mRecordsList.get(i).mRecordName = noteCard.mRecordsList.get(i).mRecordName;
+            }
+            else
+            {
+                this.mRecordsList.add(noteCard.mRecordsList.get(i));
+            }
+        }
+        while (noteCard.mRecordsList.size() != this.mRecordsList.size()) {
+            this.mRecordsList.remove(this.mRecordsList.size() - 1);
+        }
+    }
+
     public void logPressEvent(int index){
         if (mRecordsList.size() > index)
         {
