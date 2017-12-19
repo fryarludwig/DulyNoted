@@ -22,6 +22,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan|adjustResize">
         </activity>
+        <activity
+            android:name=".VisualizeActivity"
+            android:label="VisualizeActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan|adjustResize">
+        </activity>
     </application>
 
 </manifest>

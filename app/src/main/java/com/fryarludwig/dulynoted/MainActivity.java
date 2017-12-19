@@ -2,6 +2,7 @@ package com.fryarludwig.dulynoted;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,10 +10,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,8 +50,24 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
 
+        ConstraintLayout mainLayout = findViewById(R.id.main_activity_layout);
+        mainLayout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+            public void onSwipeTop() {
+//                Toast.makeText(MainActivity.this, "top", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeRight() {
+//                Toast.makeText(MainActivity.this, "right", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeLeft() {
+                Intent intent = new Intent(MainActivity.this, VisualizeActivity.class);
+                startActivity(intent);
+//                Toast.makeText(MainActivity.this, "left", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeBottom() {
+//                Toast.makeText(MainActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+        });
         RecyclerView rv = this.findViewById(R.id.card_recycle_view);
-
         rv.setHasFixedSize(true);
         rv.setLayoutManager(llm);
 
@@ -58,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 NoteCard noteCard = mNoteCards.get(cardPosition);
                 Record record = noteCard.mRecordsList.get(buttonPosition);
                 record.logEvent();
-                String message = String.format("Event saved: %s; %s; %d", noteCard.mTitle, noteCard.getRecordName(buttonPosition), record.mTimestampsList.size());
+                String message = String.format("Event saved: %s; %s; %d", noteCard.mTitle,
+                        noteCard.getRecordName(buttonPosition), record.mTimestampsList.size());
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.main_activity_layout), message, Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
