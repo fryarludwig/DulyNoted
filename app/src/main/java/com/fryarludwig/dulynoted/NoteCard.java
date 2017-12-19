@@ -11,11 +11,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
 
 public class NoteCard implements Parcelable {
     public String mTitle;
     public ArrayAdapter<String> mNoteCardAdapter;
     public ArrayList<Record> mRecordsList;
+    public boolean mIsCollapsed = true;
 
     protected NoteCard(Parcel in) {
         mTitle = in.readString();
@@ -90,6 +92,19 @@ public class NoteCard implements Parcelable {
         }
     }
 
+    public Record getLatestRecord(){
+        long bestValue = -1;
+        int bestIndex = 0;
+        for (int i = 0; i < getNumberOfOptions(); i++){
+            if (mRecordsList.get(i).getNewestEntry() > bestValue) {
+                bestValue = mRecordsList.get(i).getNewestEntry();
+                bestIndex = i;
+            }
+        }
+
+        return mRecordsList.get(bestIndex);
+    }
+
     public void logPressEvent(int index){
         if (mRecordsList.size() > index)
         {
@@ -105,10 +120,18 @@ public class NoteCard implements Parcelable {
         return null;
     }
 
-    public ArrayList<Long> getRecordsByIndex(int index){
+    public ArrayList<Long> getRecordTimestampsByIndex(int index){
         if (mRecordsList.size() > index)
         {
             return mRecordsList.get(index).mTimestampsList;
+        }
+        return null;
+    }
+
+    public Record getRecordByIndex(int index){
+        if (mRecordsList.size() > index)
+        {
+            return mRecordsList.get(index);
         }
         return null;
     }

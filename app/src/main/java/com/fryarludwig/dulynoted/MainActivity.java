@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.DragEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,19 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
         ConstraintLayout mainLayout = findViewById(R.id.main_activity_layout);
         mainLayout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
-            public void onSwipeTop() {
-//                Toast.makeText(MainActivity.this, "top", Toast.LENGTH_SHORT).show();
-            }
-            public void onSwipeRight() {
-//                Toast.makeText(MainActivity.this, "right", Toast.LENGTH_SHORT).show();
-            }
             public void onSwipeLeft() {
-                Intent intent = new Intent(MainActivity.this, VisualizeActivity.class);
-                startActivity(intent);
-//                Toast.makeText(MainActivity.this, "left", Toast.LENGTH_SHORT).show();
-            }
-            public void onSwipeBottom() {
-//                Toast.makeText(MainActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "left", Toast.LENGTH_SHORT).show();
+                ((MainActivity)mContext).onOpenVisualizeActivity();
             }
         });
         RecyclerView rv = this.findViewById(R.id.card_recycle_view);
@@ -79,11 +71,24 @@ public class MainActivity extends AppCompatActivity {
                 record.logEvent();
                 String message = String.format("Event saved: %s; %s; %d", noteCard.mTitle,
                         noteCard.getRecordName(buttonPosition), record.mTimestampsList.size());
+                mRvAdapter.notifyItemChanged(cardPosition);
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.main_activity_layout), message, Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
+        }, new OnCardPreviewToggle() {
+            @Override
+            public void onEvent(View view, int cardPosition) {
+                boolean isCollapsed = mNoteCards.get(cardPosition).mIsCollapsed;
+                mNoteCards.get(cardPosition).mIsCollapsed = !isCollapsed;
+                mRvAdapter.notifyItemChanged(cardPosition);
+            }
         });
         rv.setAdapter(mRvAdapter);
+    }
+
+    public void onOpenVisualizeActivity(){
+        Intent intent = new Intent(this, VisualizeActivity.class);
+        startActivity(intent);
     }
 
     public void onAddClicked(View view)
