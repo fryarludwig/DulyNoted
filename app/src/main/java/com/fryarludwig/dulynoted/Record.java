@@ -12,8 +12,8 @@ import java.util.Date;
 public class Record implements Parcelable, Comparable<Record> {
     public String mRecordName;
     public ArrayList<Long> mTimestampsList;
-    public SimpleDateFormat mDateFormat;
-    private static String mDateFormatString = "hh:mma, MM/dd/yy";
+    public transient SimpleDateFormat mDateFormat;
+    private static transient String mDateFormatString = "hh:mma, MM/dd/yy";
 
     public Record()
     {

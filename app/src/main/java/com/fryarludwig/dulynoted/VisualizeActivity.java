@@ -17,7 +17,6 @@ import java.util.Arrays;
 public class VisualizeActivity extends AppCompatActivity {
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

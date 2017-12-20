@@ -7,6 +7,9 @@ import android.os.Parcelable;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.widget.ArrayAdapter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,14 +18,17 @@ import java.util.Dictionary;
 
 public class NoteCard implements Parcelable {
     public String mTitle;
-    public ArrayAdapter<String> mNoteCardAdapter;
     public ArrayList<Record> mRecordsList;
-    public boolean mIsCollapsed = true;
+    public transient boolean mIsCollapsed = true;
 
     protected NoteCard(Parcel in) {
         mTitle = in.readString();
         mRecordsList = new ArrayList<>();
         in.readTypedList(mRecordsList, Record.CREATOR);
+    }
+
+    public static String GetNoteCardJson(NoteCard noteCard){
+        return "";
     }
 
     public static final Creator<NoteCard> CREATOR = new Creator<NoteCard>() {
@@ -48,42 +54,33 @@ public class NoteCard implements Parcelable {
         dest.writeTypedList(mRecordsList);
     }
 
-    public NoteCard()
-    {
+    public NoteCard() {
         mTitle = "Empty title";
         mRecordsList = new ArrayList<>();
     }
 
-    public NoteCard(NoteCard noteCard)
-    {
+    public NoteCard(NoteCard noteCard) {
         mTitle = noteCard.mTitle;
         mRecordsList = new ArrayList<>(noteCard.mRecordsList.size());
-        for (int i = 0; i < noteCard.mRecordsList.size(); i++)
-        {
+        for (int i = 0; i < noteCard.mRecordsList.size(); i++) {
             mRecordsList.add(new Record(noteCard.mRecordsList.get(i)));
         }
     }
 
-    public NoteCard(String title, ArrayList<String> array)
-    {
+    public NoteCard(String title, ArrayList<String> array) {
         mTitle = title;
         mRecordsList = new ArrayList<>(array.size());
-        for (int i = 0; i < array.size(); i++)
-        {
+        for (int i = 0; i < array.size(); i++) {
             mRecordsList.add(new Record(array.get(i)));
         }
     }
 
-    public void updateNoteCardValues(NoteCard noteCard){
+    public void updateNoteCardValues(NoteCard noteCard) {
         mTitle = noteCard.mTitle;
-        for (int i = 0; i < noteCard.mRecordsList.size(); i++)
-        {
-            if (this.mRecordsList.size() > i)
-            {
+        for (int i = 0; i < noteCard.mRecordsList.size(); i++) {
+            if (this.mRecordsList.size() > i) {
                 this.mRecordsList.get(i).mRecordName = noteCard.mRecordsList.get(i).mRecordName;
-            }
-            else
-            {
+            } else {
                 this.mRecordsList.add(noteCard.mRecordsList.get(i));
             }
         }
@@ -92,10 +89,10 @@ public class NoteCard implements Parcelable {
         }
     }
 
-    public Record getLatestRecord(){
+    public Record getLatestRecord() {
         long bestValue = -1;
         int bestIndex = 0;
-        for (int i = 0; i < getNumberOfOptions(); i++){
+        for (int i = 0; i < getNumberOfOptions(); i++) {
             if (mRecordsList.get(i).getNewestEntry() > bestValue) {
                 bestValue = mRecordsList.get(i).getNewestEntry();
                 bestIndex = i;
@@ -105,32 +102,28 @@ public class NoteCard implements Parcelable {
         return mRecordsList.get(bestIndex);
     }
 
-    public void logPressEvent(int index){
-        if (mRecordsList.size() > index)
-        {
+    public void logPressEvent(int index) {
+        if (mRecordsList.size() > index) {
             mRecordsList.get(index).logEvent();
         }
     }
 
-    public String getRecordName(int index){
-        if (mRecordsList.size() > index)
-        {
+    public String getRecordName(int index) {
+        if (mRecordsList.size() > index) {
             return mRecordsList.get(index).mRecordName;
         }
         return null;
     }
 
-    public ArrayList<Long> getRecordTimestampsByIndex(int index){
-        if (mRecordsList.size() > index)
-        {
+    public ArrayList<Long> getRecordTimestampsByIndex(int index) {
+        if (mRecordsList.size() > index) {
             return mRecordsList.get(index).mTimestampsList;
         }
         return null;
     }
 
-    public Record getRecordByIndex(int index){
-        if (mRecordsList.size() > index)
-        {
+    public Record getRecordByIndex(int index) {
+        if (mRecordsList.size() > index) {
             return mRecordsList.get(index);
         }
         return null;
@@ -138,27 +131,23 @@ public class NoteCard implements Parcelable {
 
     public ArrayList<String> getRecordNames() {
         ArrayList<String> stringList = new ArrayList<>();
-        for (int i = 0; i < mRecordsList.size(); i++)
-        {
+        for (int i = 0; i < mRecordsList.size(); i++) {
             stringList.add(mRecordsList.get(i).mRecordName);
         }
         return stringList;
     }
 
-    public void addNewRecord(String recordName){
+    public void addNewRecord(String recordName) {
         mRecordsList.add(new Record(recordName));
     }
 
-    public void setRecordName(int index, String newName)
-    {
-        if (mRecordsList.size() > index)
-        {
+    public void setRecordName(int index, String newName) {
+        if (mRecordsList.size() > index) {
             mRecordsList.get(index).mRecordName = newName;
         }
     }
 
-    public int getNumberOfOptions()
-    {
+    public int getNumberOfOptions() {
         return mRecordsList.size();
     }
 }

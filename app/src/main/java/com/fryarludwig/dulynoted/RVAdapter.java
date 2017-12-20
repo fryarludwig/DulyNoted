@@ -105,8 +105,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteCardViewHolder
 
             if (noteCard.mIsCollapsed) {
                 previewTextView.setText(noteCard.getLatestRecord().toString());
-            }
-            else {
+            } else {
                 previewTextView.setText(noteCard.getRecordByIndex(i).toString());
             }
 
@@ -127,7 +126,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.NoteCardViewHolder
             });
         }
 
-        if (noteCard.mIsCollapsed){
+        if (noteCard.mIsCollapsed) {
             noteCardViewHolder.expandPreviewButton.setImageDrawable(ContextCompat.getDrawable(
                     noteCardViewHolder.expandPreviewButton.getContext(), R.drawable.ic_expand_less));
         } else {

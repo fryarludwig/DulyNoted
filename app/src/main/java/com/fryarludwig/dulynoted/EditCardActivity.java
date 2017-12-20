@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -57,62 +58,63 @@ public class EditCardActivity extends AppCompatActivity {
         mValueIterator.setValueChangeListener(new OnValueChangedListener() {
             @Override
             public void onEvent(View view) {
-                EditCardActivity activity = (EditCardActivity)view.getContext();
+                EditCardActivity activity = (EditCardActivity) view.getContext();
                 activity.updateVisibleFields();
             }
         });
 
-        if (position >= 0)
-        {
+        if (position >= 0) {
             NoteCard notecard = MainActivity.mNoteCards.get(position);
             mValueIterator.setCurrentValue(notecard.getNumberOfOptions());
             setValuesByNoteCard(notecard);
-        }
-        else
-        {
+        } else {
             Button delete_button = findViewById(R.id.delete_card_button);
             delete_button.setVisibility(View.INVISIBLE);
             mValueIterator.setCurrentValue(DEFAULT_ITERATOR_VALUE);
         }
     }
 
-    public NoteCard getValuesAsNoteCard()
-    {
+    public NoteCard getValuesAsNoteCard() {
         NoteCard newNotecard = new NoteCard();
-        newNotecard.mTitle = ((EditText)this.findViewById(R.id.card_title_input)).getText().toString();
-        for (int i = 0; i < mValueIterator.getCurrentValue(); i++)
-        {
-            String textValue = ((EditText)this.findViewById(mOptionIdArray[i])).getText().toString();
-            if (textValue.length() > 0)
-            {
+        EditText titleTextEdit = (EditText)this.findViewById(R.id.card_title_input);
+        newNotecard.mTitle = titleTextEdit.getText().toString();
+        for (int i = 0; i < mValueIterator.getCurrentValue(); i++) {
+            String textValue = ((EditText) this.findViewById(mOptionIdArray[i])).getText().toString();
+            if (textValue.length() > 0) {
                 newNotecard.addNewRecord(textValue);
             }
         }
+
+        if (newNotecard.mTitle.length() == 0) {
+            titleTextEdit.setError("This card needs a title");
+            return null;
+        }
+        if (newNotecard.getNumberOfOptions() == 0) {
+            EditText firstTextField = findViewById(R.id.card_item_text_1);
+            firstTextField.setError("You need to have at least one card filled");
+            return null;
+        }
+
         return newNotecard;
     }
 
-    public void setValuesByNoteCard(NoteCard notecard)
-    {
+    public void setValuesByNoteCard(NoteCard notecard) {
         mValueIterator.setCurrentValue(notecard.getNumberOfOptions());
-        ((EditText)this.findViewById(R.id.card_title_input)).setText(notecard.mTitle);
-        for (int i = 0; i < notecard.getNumberOfOptions(); i++)
-        {
-            ((EditText)this.findViewById(mOptionIdArray[i])).setText(notecard.getRecordName(i));
+        ((EditText) this.findViewById(R.id.card_title_input)).setText(notecard.mTitle);
+        for (int i = 0; i < notecard.getNumberOfOptions(); i++) {
+            ((EditText) this.findViewById(mOptionIdArray[i])).setText(notecard.getRecordName(i));
         }
     }
 
-    public void updateVisibleFields()
-    {
+    public void updateVisibleFields() {
         int numFieldsVisible = mValueIterator.getCurrentValue();
-        for (int i = 0; i < mOptionIdArray.length; i++)
-        {
+        for (int i = 0; i < mOptionIdArray.length; i++) {
             EditText textField = findViewById(mOptionIdArray[i]);
             textField.setVisibility(i < numFieldsVisible ? View.VISIBLE : View.GONE);
         }
     }
 
-    public void onDelete(View view)
-    {
+    public void onDelete(View view) {
         Intent newCardIntent = new Intent();
         newCardIntent.putExtra(EXTRA_NOTECARD_POSITION, mNoteCardPosition);
         newCardIntent.putExtra(EXTRA_NOTECARD_DELETE_ME, true);
@@ -120,18 +122,18 @@ public class EditCardActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onAccept(View view)
-    {
+    public void onAccept(View view) {
         Intent newCardIntent = new Intent();
         NoteCard updatedNoteCard = getValuesAsNoteCard();
-        newCardIntent.putExtra(EXTRA_NOTECARD, updatedNoteCard);
-        newCardIntent.putExtra(EXTRA_NOTECARD_POSITION, mNoteCardPosition);
-        setResult(Activity.RESULT_OK, newCardIntent);
-        finish();
+        if (updatedNoteCard != null) {
+            newCardIntent.putExtra(EXTRA_NOTECARD, updatedNoteCard);
+            newCardIntent.putExtra(EXTRA_NOTECARD_POSITION, mNoteCardPosition);
+            setResult(Activity.RESULT_OK, newCardIntent);
+            finish();
+        }
     }
 
-    public void onCancel(View view)
-    {
+    public void onCancel(View view) {
         setResult(Activity.RESULT_CANCELED);
         finish();
     }
